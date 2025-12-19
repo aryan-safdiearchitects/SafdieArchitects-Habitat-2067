@@ -17,9 +17,9 @@ jsconfig.json
 *_backup.js
 *_optimized.js
 *_optimized.html
-*_v2.js
-*_v2.html
-*_v2_streamlined.html
+index_v2.html
+index_v2_streamlined.html
+# Note: sketch_v2.js is the production version, not ignored
 
 # Large source files (keep SVG exports only)
 *.ai
