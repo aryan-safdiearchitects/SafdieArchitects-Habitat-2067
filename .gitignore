@@ -1,0 +1,29 @@
+# Claude Code
+.claude/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+jsconfig.json
+
+# Backup and temp files
+*_backup.js
+*_optimized.js
+*_optimized.html
+*_v2.js
+*_v2.html
+*_v2_streamlined.html
+
+# Large source files (keep SVG exports only)
+*.ai
+*.mp4
+
+# Mask files (development only)
+Equalizer BW mask*.png
