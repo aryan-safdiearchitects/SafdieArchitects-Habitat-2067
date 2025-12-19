@@ -2671,7 +2671,7 @@ function drawStartPrompt() {
   // Pulsing effect
   let pulse = sin(frameCount * 0.05) * 0.3 + 0.7;
   fill(colors.cyan[0], colors.cyan[1], colors.cyan[2], 255 * pulse);
-  text("CLICK TO START", width/2, height - 80);
+  text("TAP TO START", width/2, height - 80);
 
   textSize(16);
   fill(255, 200);
@@ -2925,6 +2925,17 @@ function cycleTouchMode(direction) {
 
 // Handle touch/click events (works on both mobile and desktop)
 function touchStarted() {
+  // Start audio if not already playing (required for mobile)
+  if (!isPlaying) {
+    userStartAudio().then(() => {
+      // Try to use microphone as input
+      audio = new p5.AudioIn();
+      audio.start();
+      fft.setInput(audio);
+      isPlaying = true;
+    });
+  }
+
   // Determine if tap is on left or right half of screen
   let tapX = mouseX || (touches.length > 0 ? touches[0].x : width / 2);
 
