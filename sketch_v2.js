@@ -2848,98 +2848,72 @@ function keyPressed() {
 
 // Touch Controls for Mobile Devices
 // Define preset mode combinations for easy cycling
-function cycleTouchMode() {
-  // Define mode presets (each preset is an object with mode states)
-  const modePresets = [
-    { name: 'VERTICAL FLOW', setup: () => {
-      verticalFlowMode = true;
-      kaleidoscopeMode = false;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 0;
-      physicsMode = false;
-    }},
-    { name: 'KALEIDOSCOPE', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = true;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 0;
-      physicsMode = false;
-      pg.background(colors.darkPurple);
-    }},
-    { name: 'NEON WIREFRAME', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = false;
-      neonMode = true;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 0;
-      physicsMode = false;
-      if (svgLoaded) updateActivePaths();
-    }},
-    { name: '3D MODE', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = false;
-      neonMode = false;
-      mode3D = true;
-      tunnelMode = false;
-      particleMode = 0;
-      physicsMode = false;
-      tunnelDepth = 0;
-      for (let i = 0; i < stripZPositions.length; i++) {
-        stripZPositions[i] = 0;
-      }
-    }},
-    { name: 'KALEIDOSCOPE + TUNNEL', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = true;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = true;
-      particleMode = 0;
-      physicsMode = false;
-      tunnelSpeed = 0.02;
-      pg.background(colors.darkPurple);
-    }},
-    { name: 'PARTICLES: FIREWORKS', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = false;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 5;
-      physicsMode = false;
-      clearParticleFountains();
-    }},
-    { name: 'PARTICLES: VORTEX', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = false;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 4;
-      physicsMode = false;
-      clearParticleFountains();
-    }},
-    { name: 'PHYSICS MODE', setup: () => {
-      verticalFlowMode = false;
-      kaleidoscopeMode = false;
-      neonMode = false;
-      mode3D = false;
-      tunnelMode = false;
-      particleMode = 0;
-      physicsMode = true;
-      if (!physicsInitialized) {
-        initializePhysics();
-      }
-    }}
-  ];
+const modePresets = [
+  { name: 'VERTICAL FLOW', setup: () => {
+    verticalFlowMode = true;
+    kaleidoscopeMode = false;
+    neonMode = false;
+    mode3D = false;
+    tunnelMode = false;
+    particleMode = 0;
+    physicsMode = false;
+  }},
+  { name: 'KALEIDOSCOPE', setup: () => {
+    verticalFlowMode = false;
+    kaleidoscopeMode = true;
+    neonMode = false;
+    mode3D = false;
+    tunnelMode = false;
+    particleMode = 0;
+    physicsMode = false;
+    pg.background(colors.darkPurple);
+  }},
+  { name: 'KALEIDOSCOPE + TUNNEL', setup: () => {
+    verticalFlowMode = false;
+    kaleidoscopeMode = true;
+    neonMode = false;
+    mode3D = false;
+    tunnelMode = true;
+    particleMode = 0;
+    physicsMode = false;
+    tunnelSpeed = 0.02;
+    pg.background(colors.darkPurple);
+  }},
+  { name: 'NEON WIREFRAME', setup: () => {
+    verticalFlowMode = false;
+    kaleidoscopeMode = false;
+    neonMode = true;
+    mode3D = false;
+    tunnelMode = false;
+    particleMode = 0;
+    physicsMode = false;
+    if (svgLoaded) updateActivePaths();
+  }},
+  { name: '3D MODE', setup: () => {
+    verticalFlowMode = false;
+    kaleidoscopeMode = false;
+    neonMode = false;
+    mode3D = true;
+    tunnelMode = false;
+    particleMode = 0;
+    physicsMode = false;
+    tunnelDepth = 0;
+    for (let i = 0; i < stripZPositions.length; i++) {
+      stripZPositions[i] = 0;
+    }
+  }}
+];
 
-  // Cycle to next mode
-  touchModeIndex = (touchModeIndex + 1) % modePresets.length;
+function cycleTouchMode(direction) {
+  // direction: 1 for next (right), -1 for previous (left)
+  if (direction > 0) {
+    // Right tap - next mode
+    touchModeIndex = (touchModeIndex + 1) % modePresets.length;
+  } else {
+    // Left tap - previous mode
+    touchModeIndex = (touchModeIndex - 1 + modePresets.length) % modePresets.length;
+  }
+
   modePresets[touchModeIndex].setup();
 
   // Show overlay with mode name
@@ -2951,17 +2925,16 @@ function cycleTouchMode() {
 
 // Handle touch/click events (works on both mobile and desktop)
 function touchStarted() {
-  // Check for double-tap (within 300ms)
-  let currentTime = millis();
-  if (currentTime - lastTouchTime < 300) {
-    // Double tap - reset to first mode (Vertical Flow)
-    touchModeIndex = -1; // Will become 0 after cycling
-    cycleTouchMode();
+  // Determine if tap is on left or right half of screen
+  let tapX = mouseX || (touches.length > 0 ? touches[0].x : width / 2);
+
+  if (tapX < width / 2) {
+    // Left tap - go to previous mode
+    cycleTouchMode(-1);
   } else {
-    // Single tap - cycle to next mode
-    cycleTouchMode();
+    // Right tap - go to next mode
+    cycleTouchMode(1);
   }
-  lastTouchTime = currentTime;
 
   // Prevent default behavior (avoid issues on mobile)
   return false;
@@ -2991,7 +2964,7 @@ function drawModeOverlay() {
     fill(255, 255, 255, 180);
     textSize(14);
     textFont('Arial');
-    text('Tap to cycle modes • Double-tap to reset', width / 2, height / 2 + 25);
+    text('Tap left/right to navigate modes', width / 2, height / 2 + 25);
 
     pop();
 
@@ -3005,17 +2978,7 @@ function drawModeOverlay() {
 
 // Get current mode name for display
 function getCurrentModeName() {
-  const modeNames = [
-    'VERTICAL FLOW',
-    'KALEIDOSCOPE',
-    'NEON WIREFRAME',
-    '3D MODE',
-    'KALEIDOSCOPE + TUNNEL',
-    'PARTICLES: FIREWORKS',
-    'PARTICLES: VORTEX',
-    'PHYSICS MODE'
-  ];
-  return modeNames[touchModeIndex] || 'VERTICAL FLOW';
+  return modePresets[touchModeIndex]?.name || 'VERTICAL FLOW';
 }
 
 // Handle dropped audio files
