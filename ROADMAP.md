@@ -73,6 +73,9 @@
 - [ ] Playlist support
 
 ### UI/UX
+- [x] Mobile touch controls for mode switching
+- [x] Visual mode overlay with instructions
+- [x] Left/right tap navigation
 - [ ] On-screen control panel (show/hide)
 - [ ] Mode indicator icons
 - [ ] Preset save/load
@@ -97,7 +100,37 @@
 
 ## Session Notes
 
-### Current Session - Performance Optimization & Refinements (December 18, 2025)
+### Current Session - Mobile Support & Deployment (December 22, 2025)
+**Added mobile touch controls and deployed to production:**
+
+- **Mobile Touch Controls:**
+  - Tap left/right half of screen to navigate between modes
+  - Visual overlay displays current mode name for 3 seconds
+  - Curated mode list for mobile: Vertical Flow, Kaleidoscope, Kaleidoscope + Tunnel, Neon Wireframe, 3D Mode
+  - Removed particle and physics modes from mobile navigation for simplified UX
+  - Instructions overlay: "Tap left/right to navigate modes"
+
+- **Mobile Audio Fix:**
+  - Added `userStartAudio()` call in `touchStarted()` function
+  - Mobile browsers now properly initialize audio context on first tap
+  - Microphone access works on both desktop and mobile
+  - Updated start prompt from "CLICK TO START" to "TAP TO START"
+
+- **GitHub & Deployment Setup:**
+  - Repository: SafdieArchitects-Habitat-2067
+  - SSH key configured for git push access
+  - Automatic deployment to Netlify on push to main branch
+  - Page title updated to "Habitat 2067"
+  - Production files: `index.html` + `sketch_v2.js`
+
+- **Files Updated:**
+  - `sketch_v2.js` - Added mobile touch controls and audio initialization
+  - `index.html` - Updated to use sketch_v2.js and set page title
+  - `.gitignore` - Updated to allow sketch_v2.js (production file)
+  - `README.md` - Added mobile controls documentation
+  - `ROADMAP.md` - This file
+
+### Previous Session - Performance Optimization & Refinements (December 18, 2025)
 **Major performance improvements and visual refinements to sketch_v2.js:**
 
 - **Performance Optimizations Applied:**

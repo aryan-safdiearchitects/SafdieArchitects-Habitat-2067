@@ -85,49 +85,70 @@ Uses Matter.js physics engine with the `Equalizer_Pixel.svg` building representa
 
 ### Additional Controls
 
+#### Desktop Controls
 - **+/-** (in Kaleidoscope mode) - Adjust number of mirror segments (4-16)
 - **Arrow Up/Down** (in Neon mode) - Adjust number of active glowing paths
 - **Arrow Left/Right** (in Neon mode) - Rotate which paths are glowing
 - **Click** - Start audio (microphone input)
 - **Drag & Drop** - Load audio file
 
+#### Mobile Touch Controls
+- **Tap anywhere** - Start audio (microphone input) on first tap
+- **Tap left half of screen** - Navigate to previous mode
+- **Tap right half of screen** - Navigate to next mode
+- **Available modes** (in order):
+  1. Vertical Flow
+  2. Kaleidoscope
+  3. Kaleidoscope + Tunnel
+  4. Neon Wireframe
+  5. 3D Mode
+- **Visual feedback** - Mode name overlay appears for 3 seconds when switching
+
 ## Audio Input
 
+### Desktop
 - Click to start microphone input
 - Drag and drop any audio file to play it through the visualizer
 - FFT analysis extracts bass, mid, and treble frequencies
+
+### Mobile
+- Tap anywhere on screen to start microphone input
+- Grant microphone permissions when prompted by browser
+- Audio visualization responds to ambient sound
+- Note: File drag-and-drop not available on mobile browsers
 
 ## Files
 
 ```
 HABITAT_EQ/
-├── index.html                   # Original version with all modes
-├── index_v2.html                # Optimized version (loads all libraries)
-├── index_v2_streamlined.html    # **RECOMMENDED** - Streamlined with only essential libraries
-├── sketch.js                    # Original code (~2500 lines)
-├── sketch_v2.js                 # **OPTIMIZED** - Vertical flow mode with performance tuning
-├── sketch_v2_optimized.js       # Standalone streamlined version (experimental)
+├── index.html                   # **PRODUCTION** - Main entry point (uses sketch_v2.js)
+├── sketch_v2.js                 # **PRODUCTION** - Main visualization code with all modes
 ├── style.css                    # Minimal styling
 ├── habitat.png                  # Source image of Habitat 67 building
 ├── habitat.svg                  # Vector outline for neon wireframe mode
 ├── Equalizer_Pixel.svg          # Pixel-art SVG with UNITS/SLABS layers for physics
-├── Equalizer BW mask 1.png      # Alpha mask (original)
 ├── Equalizer BW mask 2.png      # **ACTIVE MASK** - Defines where glows appear (white = building)
 ├── README.md                    # This file
 ├── ROADMAP.md                   # Development roadmap and future ideas
 └── libraries/                   # p5.js and extensions
-    ├── p5.min.js                # Core p5.js (loaded)
-    ├── p5.sound.min.js          # Audio analysis (loaded)
-    ├── p5.particle.js           # Fountain particle system (loaded)
-    ├── p5.Polar.min.js          # Polar coordinate helpers (loaded)
-    ├── p5.glitch.js             # Glitch effects (loaded)
-    ├── p5.collide2d.min.js      # Collision detection (loaded)
-    └── ... (other extensions - not loaded in streamlined version)
+    ├── p5.min.js                # Core p5.js
+    ├── p5.sound.min.js          # Audio analysis
+    ├── p5.particle.js           # Fountain particle system
+    ├── p5.Polar.min.js          # Polar coordinate helpers
+    ├── p5.glitch.js             # Glitch effects
+    ├── p5.collide2d.min.js      # Collision detection
+    └── ... (other p5.js extensions)
 ```
 
-**Recommended Usage:** Open `index_v2_streamlined.html` for best performance with only essential libraries loaded.
-
 **Note:** Matter.js physics engine is loaded via CDN in index.html.
+
+## Deployment
+
+The visualization is deployed to Netlify and automatically updates when changes are pushed to the main branch on GitHub.
+
+**Repository:** SafdieArchitects-Habitat-2067
+**Deployment:** Automatic via Netlify (connected to GitHub)
+**Page Title:** Habitat 2067
 
 ## Technical Notes
 
